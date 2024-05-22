@@ -22,7 +22,7 @@ namespace AttestetionWork
 
         private double[] data_line;
         private double coef_line_a, coef_line_b;
-        private string series_name_line = "Линейная";
+        //private string series_name_line = "Линейная";
 
         private double stepX;
 
