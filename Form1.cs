@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Office.Interop.Excel;
 using System.Windows.Forms;
@@ -22,7 +23,6 @@ namespace AttestetionWork
 
         private double[] data_line;
         private double coef_line_a, coef_line_b;
-        //private string series_name_line = "Линейная";
 
         private double stepX;
 
@@ -110,8 +110,7 @@ namespace AttestetionWork
                 MessageBox.Show(exe.ToString(), "Возникла ошибка при открытии файла Excel", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            /*Microsoft.Office.Interop.Excel.Range r =;
-            int x = r.Column;*/
+            
             try
             {
                 //Загрузка оси Х
@@ -363,6 +362,125 @@ namespace AttestetionWork
                 res += (X[i] - mean(X)) * (Y[i] - mean(Y));
             }
             return res / (Math.Sqrt(sigma2(X)) * Math.Sqrt(sigma2(Y)) * n);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string text = "";
+
+            // Открытие файла
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+
+                // Чтение содержимого файла
+                try
+                {
+                    text = File.ReadAllText(filePath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error reading file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Если CheckBox2 отмечен, выполняем выравнивание по столбцам
+                if (checkBox2.Checked)
+                {
+                    text = AlignTextByColumns(text);
+                }
+
+                // Импортируем данные и используем их так же, как в методе для Button1
+                ImportData(text);
+                calculate();
+                set_chart_series();
+                ToggleLinearRegressionLine(true);
+                update_labels_coef();
+                update_predict_table();
+            }
+            else
+            {
+                MessageBox.Show("No file selected.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private string AlignTextByColumns(string text)
+        {
+            // Разделение текста на строки
+            string[] lines = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
+            // Определение максимальной длины строки
+            int maxLength = lines.Max(line => line.Length);
+
+            // Выравнивание текста по столбцам
+            StringBuilder sb = new StringBuilder();
+            foreach (string line in lines)
+            {
+                sb.AppendFormat("{0,-" + maxLength + "}", line);
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
+        }
+
+        private void ImportData(string data)
+        {// Разделение текста на строки
+            string[] lines = data.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
+            // Определение числа элементов X и Y
+            int countX = lines[0].Split(',').Length;
+            int countY = lines.Length;
+
+            // Создание массивов для данных X и Y
+            dataX = new double[countX];
+            dataY = new double[countY - 1];
+
+            // Заполнение массивов данными из файла
+            for (int i = 0; i < countY; i++)
+            {
+                string[] values = lines[i].Split(',');
+                if (values.Length != countX)
+                {
+                    MessageBox.Show($"Неверный формат данных в строке {i + 1}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (i == 0)
+                {
+                    for (int j = 0; j < countX; j++)
+                    {
+                        if (!double.TryParse(values[j], out dataX[j]))
+                        {
+                            MessageBox.Show($"Неверный формат данных в столбце {j + 1} строки {i + 1}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < countX; j++)
+                    {
+                        if (!double.TryParse(values[j], out dataY[i - 1]))
+                        {
+                            MessageBox.Show($"Неверный формат данных в столбце {j + 1} строки {i + 1}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // Вычисление среднего шага оси X
+            stepX = (dataX.Last() - dataX.First()) / (dataX.Length - 1);
+
+            // Вызов других методов для вычислений и построения графиков
+            calculate();
+            set_chart_series();
+            ToggleLinearRegressionLine(true);
+            update_labels_coef();
+            update_predict_table();
+
         }
     }
 }
