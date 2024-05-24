@@ -402,7 +402,7 @@ namespace AttestetionWork
             }
             else
             {
-                MessageBox.Show("No file selected.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Не выбран файл.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
