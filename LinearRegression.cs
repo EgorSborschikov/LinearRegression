@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace AttestetionWork
 {
-    public partial class Form1 : Form
+    public partial class LinearRegression : Form
     {
         private double[] dataX;
         private double[] dataY;
@@ -26,7 +26,7 @@ namespace AttestetionWork
 
         private double stepX;
 
-        public Form1()
+        public LinearRegression()
         {
             InitializeComponent();
         }
@@ -423,6 +423,18 @@ namespace AttestetionWork
             }
 
             return sb.ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            InformationToUsingApp Inf = new InformationToUsingApp();
+            Inf.Show();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            UserGuide Guide = new UserGuide();
+            Guide.Show();
         }
 
         private void ImportData(string data)

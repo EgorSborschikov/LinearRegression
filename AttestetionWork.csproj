@@ -62,16 +62,31 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="InformationToUsingApp.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="InformationToUsingApp.Designer.cs">
+      <DependentUpon>InformationToUsingApp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LinearRegression.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LinearRegression.Designer.cs">
+      <DependentUpon>LinearRegression.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="UserGuide.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserGuide.Designer.cs">
+      <DependentUpon>UserGuide.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="InformationToUsingApp.resx">
+      <DependentUpon>InformationToUsingApp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LinearRegression.resx">
+      <DependentUpon>LinearRegression.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -82,6 +97,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UserGuide.resx">
+      <DependentUpon>UserGuide.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
